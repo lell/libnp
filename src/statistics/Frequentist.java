@@ -27,15 +27,16 @@ public class Frequentist {
 			double value;
 			double left;
 			double right;
-				value = cdf.value(x);
-				assert compareFloats(value, 0.0) >= 0 : value + " was < 0.";
-				assert compareFloats(value, 1.0) <= 0 : value + " was > 1.";
-				assert !Double.isInfinite(x);
-				assert !Double.isNaN(x);
+			value = cdf.value(x);
+			assert compareFloats(value, 0.0) >= 0 : value + " was < 0.";
+			assert compareFloats(value, 1.0) <= 0 : value + " was > 1.";
+			assert !Double.isInfinite(x);
+			assert !Double.isNaN(x);
 
-				left = abs(value - empirical);
-				empirical += 1.0/n;
-				right = abs(value - empirical);
+			left = abs(value - empirical);
+			empirical += 1.0/n;
+			right = abs(value - empirical);
+
 			if (left > max) 
 				max = left;
 			
@@ -49,18 +50,17 @@ public class Frequentist {
 	
 	/* Test the hypothesis that the counts c are
 	 *  distributed as the log density p. If p is 
-	 *  not normalized, assumes there is a tail.
+	 *  not normalized, assumes there is a tail
+     *  and that the rest of the mass is in a tail
+	 *  which was not observed among the counts.
 	 *  
 	 *  returns true if the alpha value of the chi square
 	 *  statistic is less than the specified alpha.
-	 *   alpha values close to 0 mean it's 
-	 *  unlikely that the counts come from density p.
 	 */
 	
-	public static boolean chiSquareTest(
+	public static double chiSquareTest(
 			int[] c,
-			double[] p,
-			double alpha) {
+			double[] p) {
 		
 		Map<Integer, Integer> counts = new HashMap();
 		Map<Integer, Double> probs = new HashMap();
@@ -71,27 +71,12 @@ public class Frequentist {
 			probs.put(i, p[i]);
 		}
 		
-		return chiSquareTest(counts, probs, alpha);
+		return chiSquareTest(counts, probs);
 	}
-	
-	/*
-	 * Return false if the frequencies in counts come 
-	 *   from distribution prob, with probability < p 
-	 */
-	public static <T> boolean chiSquareTest(
-				Map<T, Integer> counts,
-				Map<T, Double> probs,
-				double p
-			)  {
 		
-		double alpha = chiSquareTest(counts, probs);
-		return (alpha > p);
-	}
-	
 	public static <T> double chiSquareTest(
 			Map<T, Integer> counts,
-			Map<T, Double> probs
-		) {
+			Map<T, Double> probs) {
 		
 		assert probs.keySet().containsAll(counts.keySet()) : 
 			"Frequencies are not supported by supplied probability function.";
@@ -119,9 +104,8 @@ public class Frequentist {
 			}
 		}
 		
-		
 		boolean tail;
-		if (compareFloats(cdf, 0.0) != 0) {
+		if (compareFloats(cdf, 0.0, 1e-13) != 0) {
 			tail = true;
 		} else {
 			tail = false;
@@ -142,8 +126,13 @@ public class Frequentist {
 			observed[support-1] = 0;
 			expected[support-1] = (1.0 - exp(cdf))*total;
 		}
-				double alpha = (new ChiSquareTest())
-				.chiSquareTest(expected, observed);
+		
+		for (int i = 0; i < expected.length; i++) {
+			if (expected[i] == -0) {
+				expected[i] = 0;
+			}
+		}
+		double alpha = (new ChiSquareTest()).chiSquareTest(expected, observed);
 		
 		return alpha;
 	}

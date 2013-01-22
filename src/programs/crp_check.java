@@ -15,9 +15,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.univariate.BrentOptimizer;
-import org.apache.commons.math3.optimization.univariate.UnivariateOptimizer;
+import org.apache.commons.math3.optim.univariate.BrentOptimizer;
+import org.apache.commons.math3.optim.univariate.UnivariateObjectiveFunction;
+import org.apache.commons.math3.optim.univariate.UnivariateOptimizer;
+import org.apache.commons.math3.optim.MaxEval;
+import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
+import org.apache.commons.math3.optim.univariate.SearchInterval;
 
 import static util.Operation.loadFreeform;
 import static statistics.SpecialFunctions.crp_sizes;
@@ -56,7 +59,7 @@ public class crp_check {
 		}
 		
 		List<double[]> lines = loadFreeform(new BufferedReader(new InputStreamReader(System.in)));
-		if (lines.size() == 0) {
+		if (lines == null || lines.size() == 0) {
 			return;
 		}
 		
@@ -90,8 +93,8 @@ public class crp_check {
 		if (alpha == null) {
 			// Find the ML value of alpha
 			UnivariateOptimizer optimizer = new BrentOptimizer(1e-12, 1e-14);
-			alpha = optimizer.optimize(1000, 
-				new UnivariateFunction() {
+			alpha = optimizer.optimize(new MaxEval(1000), 
+				new UnivariateObjectiveFunction(new UnivariateFunction() {
 					@Override
 					public double value(double a) {
 						Map<Integer, Double> probs = new HashMap();
@@ -102,7 +105,9 @@ public class crp_check {
 						}
 						return L;
 					}
-				}, GoalType.MAXIMIZE, 0.0, max_alpha, 1.0).getPoint();
+				}),
+				GoalType.MAXIMIZE,
+				new SearchInterval(0.0, max_alpha)).getPoint();
 			
 			System.out.println("ML_alpha= " + alpha);
 		}
