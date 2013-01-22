@@ -20,8 +20,6 @@ public final class Pair<Left, Right> {
 		if (!(other instanceof Pair)) {
 			return false;
 		}
-
-		//assert !(new Pair<FragState, CoagState>(null, null).equals(new Pair<FragState, CoagState>(bb1, aa1)));
 		Pair otherPair = (Pair) other;
 		
 		if (this.left == otherPair.left && this.right == otherPair.right) {
@@ -40,12 +38,5 @@ public final class Pair<Left, Right> {
 			return false;
 		}
 		return true;
-			
-			/*return ((this.left == otherPair.left ||
-					(this.left != null && otherPair.left != null && this.left.equals(otherPair.left))) &&
-					(this.right != null && otherPair.right != null && this.right.equals(otherPair.right)));
-					
-		}
-		return false;*/
 	}
 }
