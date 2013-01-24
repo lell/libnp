@@ -11,9 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Operation {
-
-	public long getMemoryUsage() {
-		return 0;
+	public static List<Double> range(int n) {
+		ArrayList<Double> result = new ArrayList();
+		for (int i = 1; i <= n; i++) {
+			double d = i;
+			result.add(d);
+		}
+		return result;
 	}
 
 	public static PrintStream tee(final String filename, final PrintStream p2) {

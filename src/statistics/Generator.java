@@ -1,10 +1,13 @@
 package statistics;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Map;
+import java.util.Set;
 
 import static statistics.SpecialFunctions.logsumexp;
 import static statistics.SpecialFunctions.sum;
@@ -132,5 +135,39 @@ public class Generator extends Random {
 		}
 		assert false : "Fell out of discrete sampler.";
 		return null;
+	}
+	
+	public <T> Set<Set<T>> drawCRP(Collection<T> S, double alpha) {
+		Set<Set<T>> tables = new HashSet();
+		int n = S.size();
+		if (n == 0) {
+			return tables;
+		}
+		int i = 0;
+		for (T item : S) {
+			int K = tables.size();
+			double U = uniform();
+			double cdf = alpha / (i + alpha);
+			
+			boolean found = false;
+			if (cdf > U) {
+				Set<T> table = new HashSet();
+				table.add(item);
+				tables.add(table);
+				found = true;
+			} else {
+				for (Set<T> table : tables) {
+					cdf += table.size() / (i + alpha);
+					if (cdf > U) {
+						table.add(item);
+						found = true;
+						break;
+					}
+				}
+			}
+			assert found;
+			i++;
+		}
+		return tables;
 	}
 }

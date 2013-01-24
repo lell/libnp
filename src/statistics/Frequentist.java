@@ -75,12 +75,23 @@ public class Frequentist {
 	}
 		
 	public static <T> double chiSquareTest(
-			Map<T, Integer> counts,
-			Map<T, Double> probs) {
+			Map<T, Integer> counts0,
+			Map<T, Double> probs0) {
 		
+		
+		Map<T, Integer> counts = new HashMap();
+		for (T key : counts0.keySet()) {
+			counts.put(key, counts0.get(key));
+		}
+		
+		Map<T, Double> probs = new HashMap();
+		for (T key : probs0.keySet()) {
+			probs.put(key, probs0.get(key));
+		}
+
 		assert probs.keySet().containsAll(counts.keySet()) : 
 			"Frequencies are not supported by supplied probability function.";
-	
+		
 		Set<T> domain = new HashSet(probs.keySet());
 		for (T dom : domain) {
 			if (exp(probs.get(dom)) < 1e-12) {

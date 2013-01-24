@@ -18,9 +18,9 @@ import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.optim.univariate.BrentOptimizer;
 import org.apache.commons.math3.optim.univariate.UnivariateObjectiveFunction;
 import org.apache.commons.math3.optim.univariate.UnivariateOptimizer;
-import org.apache.commons.math3.optim.MaxEval;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import org.apache.commons.math3.optim.univariate.SearchInterval;
+import org.apache.commons.math3.optim.MaxEval;
 
 import static util.Operation.loadFreeform;
 import static statistics.SpecialFunctions.crp_sizes;
@@ -28,6 +28,44 @@ import static statistics.Frequentist.chiSquareTest;
 import static java.lang.Math.log;
 
 public class crp_check {
+	
+	public static double mlAlpha(
+			final Map<Integer, Integer> counts,
+			final int n,
+			final double max_alpha) {
+		
+		// Find the ML value of alpha
+		UnivariateOptimizer optimizer = new BrentOptimizer(1e-12, 1e-14);
+		return optimizer.optimize(new MaxEval(1000), 
+			new UnivariateObjectiveFunction(new UnivariateFunction() {
+				@Override
+				public double value(double a) {
+					double[] sizes = crp_sizes(a, n);
+					double L = 0.0;
+					for (int i = 0; i < n; i++) {
+						assert counts.containsKey(i+1);
+						L += counts.get(i+1) * log(sizes[i]);
+					}
+					return L;
+				}
+			}),
+			GoalType.MAXIMIZE,
+			new SearchInterval(0.0, max_alpha)).getPoint();
+	}
+	
+	public static double chiSquareCounts(
+			final Map<Integer, Integer> counts,
+			final int n,
+			final double alpha) {
+		
+		double[] sizes = crp_sizes(alpha, n);
+		Map<Integer, Double> probs = new HashMap();
+		for (int i = 0; i < n; i++) {
+			probs.put(i+1, log(sizes[i]));
+		}
+		return chiSquareTest(counts, probs);
+	}
+	
 	public static void main(String[] cmd_args) {
 		CommandLine cmdline = null;
 		double max_alpha = 100.0;
@@ -91,33 +129,10 @@ public class crp_check {
 		}
 		
 		if (alpha == null) {
-			// Find the ML value of alpha
-			UnivariateOptimizer optimizer = new BrentOptimizer(1e-12, 1e-14);
-			alpha = optimizer.optimize(new MaxEval(1000), 
-				new UnivariateObjectiveFunction(new UnivariateFunction() {
-					@Override
-					public double value(double a) {
-						Map<Integer, Double> probs = new HashMap();
-						double[] sizes = crp_sizes(a, n);
-						double L = 0.0;
-						for (int i = 0; i < n; i++) {
-							L += counts.get(i+1) * log(sizes[i]);
-						}
-						return L;
-					}
-				}),
-				GoalType.MAXIMIZE,
-				new SearchInterval(0.0, max_alpha)).getPoint();
-			
+			alpha = mlAlpha(counts, n, max_alpha);
 			System.out.println("ML_alpha= " + alpha);
-		}
-
-		double[] sizes = crp_sizes(alpha, n);
-		Map<Integer, Double> probs = new HashMap();
-		for (int i = 0; i < n; i++) {
-			probs.put(i+1, log(sizes[i]));
-		}
-		double p = chiSquareTest(counts, probs);
+		}		
+		double p = chiSquareCounts(counts, n, alpha);
 		System.out.println("chi-square_test(K)= " + p);
 	}
 }
