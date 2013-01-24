@@ -39,6 +39,13 @@ public class Operation {
 		}
 	}
 
+	/*
+	 * Loads a file consisting of doubles into a matrix.
+	 * Assumes that each row of the file is a row of the matrix
+	 * and there is optionally one row of headers. Entries
+	 * must be able to be parsed with parseDouble (i.e., NaN
+	 * is allowed, or scientific notation). 
+	 */
 	public static double[][] loadArray(String filename) {
 		BufferedReader fp;
 		try {
@@ -48,8 +55,8 @@ public class Operation {
 		}
 		return loadArray(fp);
 	}
-		
-	public static double[][]loadArray(BufferedReader fp) {
+	
+	public static double[][] loadArray(BufferedReader fp) {
 		String line = null;
 		try {
 			line = fp.readLine();
@@ -125,6 +132,10 @@ public class Operation {
 		return result;
 	}
 	
+	/*
+	 * Loads a file consisting of doubles into a list of arrays.
+	 * Each array can be a different size.
+	 */
 	public static List<double[]> loadFreeform(String filename) {
 		BufferedReader fp;
 		try {

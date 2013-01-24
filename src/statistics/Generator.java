@@ -54,6 +54,18 @@ public class Generator extends Random {
 		return log( (exp(logupper) - exp(loglower)) * nextDouble() + exp(loglower));
 	}
 
+	public double nextExponential() {
+		return -log(nextDouble());
+	}
+	
+	public double nextExponential(double rate) {
+		return -log(nextDouble()) / rate;
+	}
+	
+	public double nextUniform(double a, double b) {
+		return a + (nextDouble() * (b-a));
+	}
+	
 	public double uniform() {
 		return nextDouble();
 	}
