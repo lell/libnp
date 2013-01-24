@@ -3,4 +3,5 @@
 .project
 .classpath
 .cache
+*.swp
 scala
