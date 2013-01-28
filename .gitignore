@@ -1,7 +1,5 @@
 *.class
 *.jar
-.project
-.classpath
 .cache
 *.swp
 scala
