@@ -1,10 +1,9 @@
 package util;
 
-public final class Pair<Left, Right> {
+public class Pair<Left, Right> {
 	public final Left left;
 	public final Right right;
 	public Pair(Left left, Right right) {
-		super();
 		this.left = left;
 		this.right = right;
 	}
@@ -20,7 +19,7 @@ public final class Pair<Left, Right> {
 		if (!(other instanceof Pair)) {
 			return false;
 		}
-		Pair otherPair = (Pair) other;
+		Pair<Left, Right> otherPair = (Pair) other;
 		
 		if (this.left == otherPair.left && this.right == otherPair.right) {
 			return true;

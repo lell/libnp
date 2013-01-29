@@ -39,9 +39,12 @@ public class TestStatistics {
 	
 	@Test
 	public void all_crp_check() {
+		test_crp_check(0.5, 15, 1000);
 		test_crp_check(1.0, 10, 1000);
 		test_crp_check(2.0, 10, 1000);
-		test_crp_check(0.5, 15, 1000);
+		test_crp_check(3.0, 10, 1000);
+		test_crp_check(4.0, 10, 1000);
+		test_crp_check(7.0, 10, 1000);
 	}
 
 }

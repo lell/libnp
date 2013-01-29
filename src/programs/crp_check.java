@@ -15,17 +15,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.optim.univariate.BrentOptimizer;
-import org.apache.commons.math3.optim.univariate.UnivariateObjectiveFunction;
-import org.apache.commons.math3.optim.univariate.UnivariateOptimizer;
-import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
-import org.apache.commons.math3.optim.univariate.SearchInterval;
-import org.apache.commons.math3.optim.MaxEval;
 
 import static util.Operation.loadFreeform;
 import static statistics.SpecialFunctions.crp_sizes;
 import static statistics.Frequentist.chiSquareTest;
 import static java.lang.Math.log;
+import static maths.Optimization.maximize;
 
 public class crp_check {
 	
@@ -35,9 +30,8 @@ public class crp_check {
 			final double max_alpha) {
 		
 		// Find the ML value of alpha
-		UnivariateOptimizer optimizer = new BrentOptimizer(1e-12, 1e-14);
-		return optimizer.optimize(new MaxEval(1000), 
-			new UnivariateObjectiveFunction(new UnivariateFunction() {
+		return maximize(
+				new UnivariateFunction() {
 				@Override
 				public double value(double a) {
 					double[] sizes = crp_sizes(a, n);
@@ -47,10 +41,7 @@ public class crp_check {
 						L += counts.get(i+1) * log(sizes[i]);
 					}
 					return L;
-				}
-			}),
-			GoalType.MAXIMIZE,
-			new SearchInterval(0.0, max_alpha)).getPoint();
+				}}, 0.0, max_alpha);
 	}
 	
 	public static double chiSquareCounts(
@@ -61,7 +52,9 @@ public class crp_check {
 		double[] sizes = crp_sizes(alpha, n);
 		Map<Integer, Double> probs = new HashMap();
 		for (int i = 0; i < n; i++) {
-			probs.put(i+1, log(sizes[i]));
+			if (sizes[i] > 0.0) {
+				probs.put(i+1, log(sizes[i]));
+			}
 		}
 		return chiSquareTest(counts, probs);
 	}

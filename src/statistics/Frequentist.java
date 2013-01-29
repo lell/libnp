@@ -116,7 +116,7 @@ public class Frequentist {
 		}
 		
 		boolean tail;
-		if (compareFloats(cdf, 0.0, 1e-13) != 0) {
+		if (compareFloats(cdf, 0.0, 1e-8) != 0) {
 			tail = true;
 		} else {
 			tail = false;
@@ -138,13 +138,7 @@ public class Frequentist {
 			expected[support-1] = (1.0 - exp(cdf))*total;
 		}
 		
-		for (int i = 0; i < expected.length; i++) {
-			if (expected[i] == -0) {
-				expected[i] = 0;
-			}
-		}
 		double alpha = (new ChiSquareTest()).chiSquareTest(expected, observed);
-		
 		return alpha;
 	}
 }

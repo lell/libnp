@@ -9,7 +9,7 @@ import maths.Matrix
 
 class normal(val mean: variable[Double],
     val precision: variable[Double],
-    val x: Double) extends variable[Double] {
+    val x: Double = Double.NaN) extends variable[Double] {
   
   def logDensity() =
     -0.5 * (precision * (mean - x) * (mean - x) + log(2.0*PI) + log(precision))
