@@ -1,6 +1,15 @@
+/*
+ * Copyright (c) 2013, Lloyd T. Elliott and Yee Whye Teh
+ * All rights reserved.
+ */
+
 package statistics;
 
-import static java.lang.Math.*;
+import static java.lang.Math.log;
+import static java.lang.Math.exp;
+import static java.lang.Math.sqrt;
+import static java.lang.Math.PI;
+import static java.lang.Math.pow;
 import static util.Float.compareFloats;
 
 import java.util.ArrayList;
@@ -13,7 +22,23 @@ import org.apache.commons.math3.analysis.UnivariateFunction;
 import util.Pair;
 
 public final class SpecialFunctions {
-
+	
+	// Logarithm of gamma function http://www.cs.princeton.edu/introcs/91float/
+	public static double logGamma(double x) {
+		if ( x==0.0 ) return Double.POSITIVE_INFINITY;
+		double tmp = (x - 0.5) * Math.log(x + 4.5) - (x + 4.5);
+		double ser = 1.0 + 76.18009173    / (x + 0)   - 86.50532033    / (x + 1)
+				+ 24.01409822    / (x + 2)   -  1.231739516   / (x + 3)
+				+  0.00120858003 / (x + 4)   -  0.00000536382 / (x + 5);
+		return tmp + log(ser * sqrt(2 * PI));
+	}
+	
+	public static double[] crp_sizes (
+			double alpha,
+			int n) {
+		
+		return crp_sizes(alpha, 0.0, n);
+	}
 	/*  Compute Pr(|pi|) = K, for pi ~ CRP(n, alpha, 0).
 	 *  From X. H. Chen, A. P. Dempster, J. S. Liu 1994,
 	 *  Weighted finite population sampling to maximize entropy.
@@ -22,6 +47,7 @@ public final class SpecialFunctions {
 	 */
 	public static double[] crp_sizes (
 			double alpha,
+			double d,
 			int n) {
 		
 		if (n == 0) {
@@ -122,7 +148,6 @@ public final class SpecialFunctions {
 	}
 	
 	public static<T> double sum(Map<T, Double> xs) {
-		assert xs.size() > 0;
 		double result = 0.0;
 		for (T tt : xs.keySet())
 			result += xs.get(tt);
@@ -140,6 +165,12 @@ public final class SpecialFunctions {
 		assert !Double.isNaN(z);
 		for (int i = 0; i < length; i++) {
 			xs[i] /= z;
+		}
+	}
+	
+	public static<T> void scale(double s, Map<T, Double> xs) {
+		for (T tt : xs.keySet()) {
+			xs.put(tt, xs.get(tt) * s);
 		}
 	}
 	

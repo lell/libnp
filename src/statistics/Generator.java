@@ -1,6 +1,7 @@
 package statistics;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
@@ -95,6 +96,7 @@ public class Generator extends Random {
 		if (length == 1)
 			return 0;
 
+		assert(compareFloats(sum(probs), 1.0) == 0);
 		double u = uniform();
 		double cdf = probs[0];
 		if (cdf > u)
@@ -117,6 +119,7 @@ public class Generator extends Random {
 		assert probs.length > 0 : "Sampling from empty set.";
 		double u = loguniform();
 		double cdf = probs[0];
+		assert(compareFloats(logsumexp(probs), 0.0) == 0);
 		if (cdf > u)
 			return 0;
 
@@ -147,6 +150,117 @@ public class Generator extends Random {
 		}
 		assert false : "Fell out of discrete sampler.";
 		return null;
+	}
+	
+
+
+	public int nextBernoulli(double pp) {
+		if ( nextDouble() < pp ) return 1;
+		return 0;
+	}
+
+	public double nextGamma(double shape) {
+		double aa, bb, cc, dd;
+		double uu, vv, ww, xx, yy, zz;
+
+		if ( shape <= 0.0 ) {
+			/* Not well defined, set to zero and skip. */
+			assert false;
+			return 0.0;
+		} else if ( shape == 1.0 ) {
+			/* Exponential */
+			return nextExponential();
+		} else if ( shape < 1.0 ) {
+			/* Use Johnks generator */
+			cc = 1.0 / shape;
+			dd = 1.0 / (1.0-shape);
+			while (true) {
+				xx = pow(nextDouble(), cc);
+				yy = xx + pow(nextDouble(), dd);
+				if ( yy <= 1.0 ) {
+					double result = - log(nextDouble()) * xx / yy;
+					assert !Double.isNaN(result);
+					assert !Double.isInfinite(result);
+					//assert result > 0.0;
+					return result;
+				}
+			}
+		} else { /* shape > 1.0 */
+			/* Use bests algorithm */
+			bb = shape - 1.0;
+			cc = 3.0 * shape - 0.75;
+			while (true) {
+				uu = nextDouble();
+				vv = nextDouble();
+				ww = uu * (1.0 - uu);
+				yy = sqrt(cc / ww) * (uu - 0.5);
+				xx = bb + yy;
+				if (xx >= 0) {
+					zz = 64.0 * ww * ww * ww * vv * vv;
+					if ( ( zz <= (1.0 - 2.0 * yy * yy / xx) ) ||
+							( log(zz) <= 2.0 * (bb * log(xx / bb) - yy) ) ) {
+
+						double result = xx;
+						assert !Double.isNaN(result);
+						assert !Double.isInfinite(result);
+						assert result > 0.0;
+						return result;
+					}
+				}
+			}
+		}
+	}
+
+	public double nextGamma(double shape, double invscale) {
+		assert invscale > 0.0;
+		return nextGamma(shape)/invscale;
+	}
+
+	public double nextBeta(double aa, double bb) {
+		if (aa==0.0 && bb==0.0) {
+			return nextBernoulli(0.5);
+		}
+		assert (aa > 0 && bb > 0);
+		aa = nextGamma(aa);
+		bb = nextGamma(bb);
+		assert !Double.isNaN(aa);
+		assert !Double.isInfinite(aa);
+		assert !Double.isNaN(bb);
+		assert !Double.isInfinite(bb);
+		assert (aa + bb > 0.0);
+		assert aa  >= 0;
+		assert bb >= 0;
+		return aa/(aa+bb);
+	}
+
+	public double[] nextDirichlet(double[] aa) {
+		double[] gg = new double[aa.length];
+		double sum = 0.0;
+		for ( int ii = 0 ; ii < aa.length ; ii++ )
+			sum += gg[ii] = nextGamma(aa[ii]);
+		for ( int ii = 0 ; ii < aa.length ; ii++ )
+			gg[ii] /= sum;
+		return gg;
+	}
+
+	public<T> Map<T, Double> nextDirichlet(Map<T, Double> aa) {
+		List<T> ordered = new ArrayList();
+		for (T key : aa.keySet()) {
+			ordered.add(key);
+		}
+		
+		double[] gg = new double[aa.size()];
+		double sum = 0.0;
+		for ( int ii = 0 ; ii < aa.size() ; ii++ )
+			sum += gg[ii] = nextGamma(aa.get(ordered.get(ii)));
+		for ( int ii = 0 ; ii < aa.size() ; ii++ )
+			gg[ii] /= sum;
+		
+		Map<T, Double> result = new HashMap();
+		for ( int ii = 0 ; ii < aa.size() ; ii++ )
+			result.put(ordered.get(ii), gg[ii]);
+		
+		return result;
 	}
 	
 	public <T> Set<Set<T>> drawCRP(Collection<T> S, double alpha) {
