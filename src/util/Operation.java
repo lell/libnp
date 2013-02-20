@@ -146,6 +146,7 @@ public class Operation {
 		return loadFreeform(fp);
 	}
 	
+	// Optional header
 	public static List<double[]> loadFreeform(BufferedReader fp) {
 		String line = null;
 		
@@ -164,14 +165,21 @@ public class Operation {
 			return null;
 
 		int num_rows = 0;
-		Boolean header = null;
+		boolean first = true;
 		Integer num_cols = null;
 		List<double[]> array = new ArrayList();
 		while (line != null && !line.equals("\n")) {
 			String cols[] = line.trim().split("\\s+");
 			double[] row = new double[cols.length];
 			for (int j = 0; j < cols.length; j++) {
-				row[j] = Double.valueOf(cols[j]);
+				try {
+					row[j] = Double.valueOf(cols[j]);
+				} catch (NumberFormatException e) {
+					if (!first) {
+						throw e;
+					}
+				}
+				
 			}
 			array.add(row);
 			try {
@@ -179,6 +187,7 @@ public class Operation {
 			} catch (IOException e) {
 				return null;
 			}
+			first = false;
 		}
 		return array;
 	}
