@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Map;
 import java.util.Set;
 
+
 import static statistics.SpecialFunctions.logsumexp;
 import static statistics.SpecialFunctions.sum;
 import static util.Float.compareFloats;
@@ -295,5 +296,16 @@ public class Generator extends Random {
 			i++;
 		}
 		return tables;
+	}
+
+	public <T> Set<T> nextSubset(Set<T> set, int num) {
+		Set<T> result = new HashSet();
+		List<T> shuffled = new ArrayList();
+		shuffled.addAll(set);
+		this.shuffle(shuffled);
+		for (int i = 0; i < num; i++)
+			result.add(shuffled.get(i));
+		
+		return result;
 	}
 }
