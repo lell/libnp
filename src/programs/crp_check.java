@@ -37,7 +37,9 @@ public class crp_check {
 					double[] sizes = crp_sizes(a, n);
 					double L = 0.0;
 					for (int i = 0; i < n; i++) {
-						assert counts.containsKey(i+1);
+						if (!counts.containsKey(i+1)) {
+							counts.put(i+1, 0);
+						}
 						L += counts.get(i+1) * log(sizes[i]);
 					}
 					return L;
