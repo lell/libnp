@@ -138,6 +138,10 @@ public class Frequentist {
 			expected[support-1] = (1.0 - exp(cdf))*total;
 		}
 		
+		for (int i = 0; i < expected.length; i++) {
+			assert expected[i] > 0;
+			//assert observed[i] > 0;
+		}
 		double alpha = (new ChiSquareTest()).chiSquareTest(expected, observed);
 		return alpha;
 	}

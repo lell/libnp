@@ -16,7 +16,7 @@ public class Float {
 		if (!MEPS_known) {
 			computeMEPS();
 		}
-		return 10 * MEPS;
+		return MEPS;
 	}
 
 	public static int compareFloats(double a, double b) {

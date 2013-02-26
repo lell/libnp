@@ -1,10 +1,12 @@
 package util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class Operation {
 			return p2;
 		}
 	}
-
+	
 	/*
 	 * Loads a file consisting of doubles into a matrix.
 	 * Assumes that each row of the file is a row of the matrix
@@ -130,6 +132,39 @@ public class Operation {
 				result[i][j] = array.get(i)[j];
 		
 		return result;
+	}
+	
+	public static void saveArray(double[][] data, String filename) {
+		BufferedWriter fp = null;
+		try {
+			fp = new BufferedWriter(new FileWriter(filename));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		saveArray(data, fp);
+	}
+	
+	public static void saveArray(double[][] data, BufferedWriter fp) {
+		if (data.length == 0 || data[0].length == 0) {
+			return;
+		}
+
+		try {
+			for (int i = 0; i < data.length; i++) {
+				String first = "";
+				for (int j = 0; j < data[0].length; j++) {
+						fp.write(first + data[i][j]);
+					first = " ";
+				}
+				fp.write("\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*
