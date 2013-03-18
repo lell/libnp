@@ -30,7 +30,7 @@ public class MatrixCollector implements Collector {
 	public void collect() {
 		String filename = prefix;
 		if (!collapse) {
-			filename += "." + String.format("%04d", index++);
+			filename += String.format("%06d", index++);
 		}
 		
 		PrintStream output = null;

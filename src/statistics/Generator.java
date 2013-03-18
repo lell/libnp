@@ -303,8 +303,9 @@ public class Generator extends Random {
 		List<T> shuffled = new ArrayList();
 		shuffled.addAll(set);
 		this.shuffle(shuffled);
-		for (int i = 0; i < num; i++)
+		for (int i = 0; i < num; i++) {
 			result.add(shuffled.get(i));
+		}
 		
 		return result;
 	}

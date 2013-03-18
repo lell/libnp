@@ -177,7 +177,6 @@ public final class SpecialFunctions {
 	public static<T> void normalize(Map<T, Double> xs) {
 		double z = sum(xs);
 		for (T tt : xs.keySet()) {
-			assert xs.get(tt) > 0.0;
 			xs.put(tt, xs.get(tt)/z);
 		}
 

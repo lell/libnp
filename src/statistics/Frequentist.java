@@ -78,6 +78,9 @@ public class Frequentist {
 			Map<T, Integer> counts0,
 			Map<T, Double> probs0) {
 		
+		if (counts0.size() == 1) {
+			return 1.0;
+		}
 		
 		Map<T, Integer> counts = new HashMap();
 		for (T key : counts0.keySet()) {
@@ -115,12 +118,13 @@ public class Frequentist {
 			}
 		}
 		
-		boolean tail;
+		boolean tail = false;
+		/*boolean tail;
 		if (compareFloats(cdf, 0.0, 1e-8) != 0) {
 			tail = true;
 		} else {
 			tail = false;
-		}
+		}*/
 	
 		final int support = counts.size() + (tail ? 1 : 0);
 		double[] expected = new double[support];
@@ -140,7 +144,8 @@ public class Frequentist {
 		
 		for (int i = 0; i < expected.length; i++) {
 			assert expected[i] > 0;
-			//assert observed[i] > 0;
+			assert observed[i] > 0;
+			System.out.println(expected[i] + " " + observed[i]);
 		}
 		double alpha = (new ChiSquareTest()).chiSquareTest(expected, observed);
 		return alpha;

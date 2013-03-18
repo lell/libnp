@@ -5,7 +5,7 @@ trait variable[T] {
   def get(): T
   def mutate(x: T): variable[T]
 }
-
+ 
 class constant[T](val x: T) extends variable[T]  {
   def logDensity(): Double = Double PositiveInfinity
   def get(): T = x

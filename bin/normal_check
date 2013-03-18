@@ -1,0 +1,12 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Cwd 'abs_path';
+use File::Basename;
+use Getopt::Long qw(:config pass_through);
+
+my $SCRIPT_DIR=dirname(abs_path($0));
+my $LIB_DIR="$SCRIPT_DIR/../lib";
+my $BUILD_DIR="$SCRIPT_DIR/../build";
+
+system "java -ea -cp $BUILD_DIR:$LIB_DIR/commons-cli-1.2.jar:$LIB_DIR//commons-math3-3.1.1.jar programs.normal_check @ARGV\n";

@@ -1,5 +1,5 @@
 package random
 
-trait measures[T] {
-
+trait measure[T] {
+  def draw():T;
 }
