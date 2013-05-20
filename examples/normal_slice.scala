@@ -1,7 +1,7 @@
-import random.xfamily.normal
-import random.variable
-import mcmc.slice
-import statistics.Generator
+import libnp.random.xfamily.normal
+import libnp.random.variable
+import libnp.mcmc.slice
+import libnp.statistics.Generator
 
 
 object main {

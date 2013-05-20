@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import statistics.Generator;
-import programs.crp_check; 
-import static util.Operation.range; 
-import static util.Float.compareFloats; 
+import libnp.statistics.Generator;
+import libnp.programs.crp_check; 
+import static libnp.util.Operation.range; 
+import static libnp.util.Float.compareFloats; 
 
 import static org.junit.Assert.*;
 import org.junit.Test;
