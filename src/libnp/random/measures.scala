@@ -1,5 +1,5 @@
 package libnp.random
 
 trait measure[T] {
-  def draw():T;
+  def draw(): T;
 }

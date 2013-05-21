@@ -1,8 +1,11 @@
+/* libnp
+ * Copyright (c) 2013, Lloyd T. Elliott and Yee Whye Teh
+ */
+
 package libnp.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -21,11 +24,20 @@ public class Operation {
 		}
 		return result;
 	}
-
+	
+	public static double[] arange(int n) {
+		double[] result = new double[n];
+		for (int i = 0; i < n; i++) {
+			result[i] = (double)i;
+		}
+		return result;
+	}
+		
 	public static PrintStream tee(final String filename, final PrintStream p2) {
 		try {
 			return new PrintStream(new FileOutputStream(filename)) {
 				final PrintStream stream = p2;
+
 				@Override
 				public void write(byte[] b, int off, int len) {
 					super.write(b, off, len);
@@ -40,13 +52,12 @@ public class Operation {
 			return p2;
 		}
 	}
-	
+
 	/*
-	 * Loads a file consisting of doubles into a matrix.
-	 * Assumes that each row of the file is a row of the matrix
-	 * and there is optionally one row of headers. Entries
-	 * must be able to be parsed with parseDouble (i.e., NaN
-	 * is allowed, or scientific notation). 
+	 * Loads a file consisting of doubles into a matrix. Assumes that each row
+	 * of the file is a row of the matrix and there is optionally one row of
+	 * headers. Entries must be able to be parsed with parseDouble (i.e., NaN is
+	 * allowed, or scientific notation).
 	 */
 	public static double[][] loadArray(String filename) {
 		BufferedReader fp;
@@ -57,7 +68,7 @@ public class Operation {
 		}
 		return loadArray(fp);
 	}
-	
+
 	public static double[][] loadArray(BufferedReader fp) {
 		String line = null;
 		try {
@@ -70,9 +81,10 @@ public class Operation {
 			}
 			return null;
 		}
-		
-		if (line == null || line.equals("\n"))
+
+		if (line == null || line.equals("\n")) {
 			return null;
+		}
 
 		int num_rows = 0;
 		Boolean header = null;
@@ -87,8 +99,7 @@ public class Operation {
 				for (String col : cols) {
 					try {
 						Double.parseDouble(col);
-					}
-					catch(NumberFormatException e) {
+					} catch (NumberFormatException e) {
 						header = true;
 						break;
 					}
@@ -98,7 +109,7 @@ public class Operation {
 					num_rows--;
 				}
 			}
-			
+
 			if (header == false || num_rows >= 1) {
 				assert num_cols == cols.length;
 				double[] row = new double[num_cols];
@@ -107,7 +118,7 @@ public class Operation {
 				}
 				array.add(row);
 			}
-			
+
 			try {
 				line = fp.readLine();
 			} catch (IOException e1) {
@@ -119,21 +130,23 @@ public class Operation {
 				return null;
 			}
 		}
-		
+
 		try {
 			fp.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		double[][] result = new double[num_rows][num_cols];
-		for (int i = 0; i < num_rows; i++)
-			for (int j = 0; j < num_cols; j++)
+		for (int i = 0; i < num_rows; i++) {
+			for (int j = 0; j < num_cols; j++) {
 				result[i][j] = array.get(i)[j];
-		
+			}
+		}
+
 		return result;
 	}
-	
+
 	public static void saveArray(double[][] data, String filename) {
 		BufferedWriter fp = null;
 		try {
@@ -147,7 +160,7 @@ public class Operation {
 		}
 		saveArray(data, fp);
 	}
-	
+
 	public static void saveArray(double[][] data, BufferedWriter fp) {
 		if (data.length == 0 || data[0].length == 0) {
 			return;
@@ -157,7 +170,7 @@ public class Operation {
 			for (int i = 0; i < data.length; i++) {
 				String first = "";
 				for (int j = 0; j < data[0].length; j++) {
-						fp.write(first + data[i][j]);
+					fp.write(first + data[i][j]);
 					first = " ";
 				}
 				fp.write("\n");
@@ -166,10 +179,11 @@ public class Operation {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
-	 * Loads a file consisting of doubles into a list of arrays.
-	 * Each array can be a different size.
+	 * Loads a file consisting of doubles into a list of arrays. Each array can
+	 * be a different size. If the first row of the file has headers for the
+	 * columns, then that row is skipped.
 	 */
 	public static List<double[]> loadFreeform(String filename) {
 		BufferedReader fp;
@@ -180,11 +194,10 @@ public class Operation {
 		}
 		return loadFreeform(fp);
 	}
-	
-	// Optional header
+
 	public static List<double[]> loadFreeform(BufferedReader fp) {
 		String line = null;
-		
+
 		try {
 			line = fp.readLine();
 		} catch (IOException e1) {
@@ -195,9 +208,10 @@ public class Operation {
 			}
 			return null;
 		}
-		
-		if (line == null || line.equals("\n"))
+
+		if (line == null || line.equals("\n")) {
 			return null;
+		}
 
 		int num_rows = 0;
 		boolean first = true;
@@ -214,7 +228,7 @@ public class Operation {
 						throw e;
 					}
 				}
-				
+
 			}
 			array.add(row);
 			try {

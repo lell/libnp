@@ -3,7 +3,6 @@ import libnp.random.variable
 import libnp.mcmc.slice
 import libnp.statistics.Generator
 
-
 object main {
   def main(args: Array[String]) = {
     val slicer = new slice(-1.0, 1.0)

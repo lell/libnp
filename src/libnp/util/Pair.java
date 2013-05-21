@@ -1,26 +1,33 @@
+/* libnp
+ * Copyright (c) 2013, Lloyd T. Elliott and Yee Whye Teh
+ */
+
 package libnp.util;
 
 public class Pair<Left, Right> {
 	public final Left left;
 	public final Right right;
+
 	public Pair(Left left, Right right) {
 		this.left = left;
 		this.right = right;
 	}
-	
+
+	@Override
 	public int hashCode() {
 		int hashLeft = left != null ? left.hashCode() : 0;
 		int hashRight = right != null ? right.hashCode() : 0;
-		
+
 		return (hashLeft + hashRight) * hashRight + hashLeft;
 	}
-	
+
+	@Override
 	public boolean equals(Object other) {
 		if (!(other instanceof Pair)) {
 			return false;
 		}
 		Pair<Left, Right> otherPair = (Pair) other;
-		
+
 		if (this.left == otherPair.left && this.right == otherPair.right) {
 			return true;
 		} else if (otherPair.left == null && this.left != null) {

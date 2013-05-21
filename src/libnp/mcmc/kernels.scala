@@ -1,3 +1,7 @@
+/* libnp
+ * Copyright (c) 2013, Lloyd T. Elliott and Yee Whye Teh
+ */
+
 package libnp.mcmc
 
 import libnp.random.variable
@@ -27,7 +31,7 @@ class slice(val lower: Double, val upper: Double) extends kernel[Double] {
     }
     iter(X, lower, upper)
   }
-  
+
   def getLower(): Double = lower
   def getUpper(): Double = upper
 }

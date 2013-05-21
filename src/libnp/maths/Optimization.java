@@ -12,8 +12,7 @@ public class Optimization {
 	public static double maximize(UnivariateFunction f, double a, double b) {
 		UnivariateOptimizer optimizer = new BrentOptimizer(1e-12, 1e-14);
 		return optimizer.optimize(new MaxEval(1000),
-				new UnivariateObjectiveFunction(f),
-				GoalType.MAXIMIZE,
+				new UnivariateObjectiveFunction(f), GoalType.MAXIMIZE,
 				new SearchInterval(a, b)).getPoint();
 	}
 }
