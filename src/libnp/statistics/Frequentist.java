@@ -142,7 +142,7 @@ public class Frequentist {
 		for (int i = 0; i < expected.length; i++) {
 			assert expected[i] > 0;
 			assert observed[i] > 0;
-			System.out.println(expected[i] + " " + observed[i]);
+			//System.out.println(expected[i] + " " + observed[i]);
 		}
 		double alpha = (new ChiSquareTest()).chiSquareTest(expected, observed);
 		return alpha;

@@ -29,17 +29,17 @@ public class TestStatistics {
 			int K = generator.drawCRP(r, alpha).size();
 			counts.put(K, counts.get(K) + 1);
 		}
+		
 		double p = crp_check.chiSquareCounts(counts, n, alpha);
-		assertTrue("chiSquare was " + p, p > 0.0001);
+		assertTrue("chiSquare was " + p, p > 0.01);
 
 		double mlAlpha = crp_check.mlAlpha(counts, n, 100.0);
 
-		assertTrue("mlAlpha was " + mlAlpha,
-				compareFloats(alpha, mlAlpha, 1.0) == 0);
+		assertTrue("mlAlpha was " + mlAlpha, compareFloats(alpha, mlAlpha, 0.5) == 0);
 	}
 
 	@Test
-	public void all_crp_check() {
+	public void crp_check_all() {
 		test_crp_check(0.5, 15, 1000);
 		test_crp_check(1.0, 10, 1000);
 		test_crp_check(2.0, 10, 1000);

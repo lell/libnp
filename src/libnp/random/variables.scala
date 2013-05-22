@@ -24,5 +24,5 @@ class weighted_dirac[T](val weight: Double, val x: T) extends variable[T] {
 
 object variable {
   implicit def variable2T[T](X: variable[T]): T = X get
-  implicit def T2constant[Double](x: Double): variable[Double] = new dirac(x)
+  implicit def T2dirac[Double](x: Double): variable[Double] = new dirac(x)
 }

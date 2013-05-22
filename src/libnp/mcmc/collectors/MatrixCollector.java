@@ -21,60 +21,54 @@ public class MatrixCollector implements Collector {
 
 	public MatrixCollector(Collectable cc, String property, String prefix,
 			boolean collapse) {
+		
 		this(cc, property, prefix);
 		this.collapse = collapse;
 
-		if (collapse == true) {
+		if (collapse) {
 			if (new File(prefix).exists() && !new File(prefix).delete()) {
 				System.out.println("Could not delete existing prefix: "
 						+ prefix);
 				System.exit(-1);
 			}
+		} else {
+			new File(prefix).mkdirs();
 		}
 	}
 
-	@Override
-	public void collect() {
+	protected void process(Object[][] returned) {
 		String filename = prefix;
 		if (!collapse) {
-			filename += String.format("%06d", index++);
+			filename += String.format("/%06d", index++);
 		}
 
 		PrintStream output = null;
 		try {
 			output = new PrintStream(new BufferedOutputStream(
-					new FileOutputStream(new File(filename), collapse))); // append
-																			// if
-																			// it
-																			// already
-																			// exists,
-																			// if
-																			// we
-																			// are
-																			// collapsing
-																			// to
-																			// a
-																			// single
-																			// file.
+					new FileOutputStream(new File(filename), collapse)));
 
 		} catch (IOException ee) {
 			System.err.println("Unable to open " + filename + ": "
 					+ ee.getMessage());
 		}
-
-		Object[][] returned = (Object[][]) cc.get(property);
+		
 		Integer rows = returned.length;
 		Integer cols = returned[0].length;
-		for (int i = 0; i < returned.length; i++) {
-			for (int j = 0; j < returned[i].length; j++) {
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
 				output.print(returned[i][j]);
-				if (j < returned[0].length - 1) {
+				if (j < cols - 1) {
 					output.print(" ");
 				}
 			}
 			output.println();
 		}
-		output.close();
+		output.close();		
+	}
+	@Override
+	public void collect() {
+		Object[][] returned = (Object[][]) cc.get(property);
+		process(returned);
 	}
 
 	@Override
