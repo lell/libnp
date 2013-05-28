@@ -1,7 +1,7 @@
-package programs;
+package libnp.programs;
 
-import statistics.Generator;
-import static util.Operation.range;
+import libnp.statistics.Generator;
+import static libnp.util.Operation.range;
 
 import java.util.Set;
 import java.util.HashSet;

@@ -5,6 +5,7 @@
 package libnp.mcmc
 
 import libnp.random.variable
+import libnp.random.sampleable
 import libnp.statistics.Generator
 
 trait kernel[T] {
@@ -34,4 +35,24 @@ class slice(val lower: Double, val upper: Double) extends kernel[Double] {
 
   def getLower(): Double = lower
   def getUpper(): Double = upper
+}
+
+class mh[T](val q: T => sampleable[T]) extends kernel[T] {
+  def apply(X: variable[T], gen: Generator): variable[T] = {
+    val Qf = q(X)
+    val Y = X.mutate(Qf.sample(gen))
+    val Qb = q(Y)
+    val a = (
+          Y.logDensity() - X.logDensity()
+          + Qb.logDensity() - Qf.logDensity()
+        ) 
+    
+    if (a > 0) {
+      Y 
+    } else if (a > gen.loguniform()) {
+      Y
+    } else {
+      X
+    }
+  }
 }

@@ -1,6 +1,6 @@
-package programs;
+package libnp.programs;
 
-import static util.Operation.loadFreeform;
+import static libnp.util.Operation.loadFreeform;
 import org.apache.commons.math3.stat.inference.ChiSquareTest; //.chiSquareTestDataSetsComparison;
 
 import java.util.List;
