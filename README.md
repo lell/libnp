@@ -36,7 +36,7 @@ for (var iter <- 1 to iters) {
   // iterate the chain with mh kernel
   X = kernel.apply(X, gen)
   if (iter > burnin) {
-    print X
+    println(X.get())
   }
 }
 ````
