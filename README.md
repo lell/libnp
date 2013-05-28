@@ -69,4 +69,6 @@ After these steps, the unit tests in unit.TestStatistics can be run by right cli
 TODO
 ====
 
-The linear
+- linear algebra package/multivariate distributions
+- more work on the grammar of random variables so they can be added/subtracted and truncated with binary operations
+- define grammar for random measure classes
