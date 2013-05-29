@@ -10,12 +10,40 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Operation {
+
+	/* Following code is from stackoverflow */
+	public static String removeExtention(String filePath) {
+		// These first few lines the same as Justin's
+		File f = new File(filePath);
+
+		// if it's a directory, don't remove the extention
+		if (f.isDirectory()) return filePath;
+
+		String name = f.getName();
+
+		// Now we know it's a file - don't need to do any special hidden
+		// checking or contains() checking because of:
+		final int lastPeriodPos = name.lastIndexOf('.');
+		if (lastPeriodPos <= 0)
+		{
+			// No period after first character - return name as it was passed in
+			return filePath;
+		}
+		else
+		{
+			// Remove the last period and everything after it
+			File renamed = new File(f.getParent(), name.substring(0, lastPeriodPos));
+			return renamed.getPath();
+		}
+	}
+	
 	public static List<Double> range(int n) {
 		ArrayList<Double> result = new ArrayList();
 		for (int i = 1; i <= n; i++) {
@@ -24,7 +52,7 @@ public class Operation {
 		}
 		return result;
 	}
-	
+
 	public static double[] arange(int n) {
 		double[] result = new double[n];
 		for (int i = 0; i < n; i++) {
@@ -32,7 +60,7 @@ public class Operation {
 		}
 		return result;
 	}
-		
+
 	public static PrintStream tee(final String filename, final PrintStream p2) {
 		try {
 			return new PrintStream(new FileOutputStream(filename)) {
@@ -51,6 +79,41 @@ public class Operation {
 			e.printStackTrace();
 			return p2;
 		}
+	}
+	public static List<String> loadHeaders(String filename) {
+		BufferedReader fp;
+		try {
+			fp = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			return null;
+		}
+		return loadHeaders(fp);
+	}
+
+	public static List<String> loadHeaders(BufferedReader fp) {
+		String line = null;
+		try {
+			line = fp.readLine();
+		} catch (IOException e1) {
+			try {
+				fp.close();
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			return null;
+		}
+
+		if (line == null || line.equals("\n")) {
+			return null;
+		}
+
+		List<String> headers = new ArrayList();
+		
+		String cols[] = line.trim().split("\\s+");
+		for (String col : cols) {
+			headers.add(col);
+		}
+		return headers;
 	}
 
 	/*
