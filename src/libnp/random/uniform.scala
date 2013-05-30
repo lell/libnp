@@ -12,7 +12,7 @@ class uniform(val left: variable[Double],
   var x: Double = Double.NaN) extends variable[Double] with sampleable[Double] {
 
   def logDensity() =
-    -log(right - left)
+    -log(x) -log(right - left)
 
   def get() =
     x

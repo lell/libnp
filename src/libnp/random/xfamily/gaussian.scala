@@ -15,8 +15,13 @@ class normal(val mean: variable[Double],
   val precision: variable[Double],
   var x: Double = Double.NaN) extends variable[Double] {
 
-  def logDensity() =
-    -0.5 * (precision * (mean - x) * (mean - x) + log(2.0 * PI) + log(precision))
+  def logNormalizer() = 
+    0.5 * (log(2.0*PI)  - log(precision))
+  
+  def logDensity() = {
+    val diff = mean - x
+    -0.5 * diff * diff * precision - logNormalizer()
+  }
 
   def get() =
     x
@@ -31,8 +36,14 @@ class lognormal(val logmean: variable[Double],
   val logprecision: variable[Double],
   var x: Double = Double.NaN) extends variable[Double] {
 
-  def logDensity() =
-    -0.5 * (logprecision * (logmean - log(x)) * (logmean - log(x)) + log(2.0 * PI) + log(logprecision))
+  def logNormalizer() = 
+    0.5 * (log(2.0*PI)  - log(logprecision))
+  
+  def logDensity() = {
+    val logx = log(x)
+    val diff = logmean - logx
+    -0.5 * diff * diff * logprecision - logNormalizer() - logx
+  }
 
   def get() =
     x

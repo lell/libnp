@@ -109,7 +109,12 @@ public class Generator extends Random {
 			return 0;
 		}
 
-		assert (compareFloats(sum(probs), 1.0) == 0);
+		for (int i  = 0; i < probs.length; i++) {
+			assert !Double.isNaN(probs[i]);
+			assert !Double.isInfinite(probs[i]);
+		}
+		
+		assert (compareFloats(sum(probs, length), 1.0, 1e-8) == 0) : sum(probs, length);
 		double u = uniform();
 		double cdf = probs[0];
 		if (cdf > u) {
