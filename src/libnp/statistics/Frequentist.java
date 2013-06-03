@@ -51,7 +51,7 @@ public class Frequentist {
 
 		}
 
-		double lambda = (sqrt(n) + 0.12 + 0.11/sqrt(n))*D;
+		/*double lambda = (sqrt(n) + 0.12 + 0.11/sqrt(n))*D;
 		double lambda_squared = lambda * lambda; 
 		Double previous = null;
 		Double pval = 0.0;
@@ -62,7 +62,7 @@ public class Frequentist {
 			int sign = (j%2==0)?-1:1;
 			pval += 2.0 * sign * exp(-2.0 * lambda_squared * j * j);
 			j++;
-		}
+		}*/
 		
 		return D;
 	}
