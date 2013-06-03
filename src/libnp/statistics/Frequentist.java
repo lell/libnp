@@ -8,6 +8,7 @@ import org.apache.commons.math3.stat.inference.ChiSquareTest;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import java.util.Map;
 import static java.lang.Math.exp;
+import static java.lang.Math.sqrt;
 import static java.lang.Math.abs;
 
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import static libnp.util.Float.compareFloats;
 public class Frequentist {
 
 	public static double ksTest(double[] xs, UnivariateFunction cdf) {
-		double max = 0.0;
+		double D = 0.0;
 		sort(xs);
 		int n = xs.length;
 		assert n > 0;
@@ -40,17 +41,30 @@ public class Frequentist {
 			empirical += 1.0 / n;
 			right = abs(value - empirical);
 
-			if (left > max) {
-				max = left;
+			if (left > D) {
+				D = left;
 			}
 
-			if (right > max) {
-				max = right;
+			if (right > D) {
+				D = right;
 			}
 
 		}
 
-		return max;
+		double lambda = (sqrt(n) + 0.12 + 0.11/sqrt(n))*D;
+		double lambda_squared = lambda * lambda; 
+		Double previous = null;
+		Double pval = 0.0;
+		
+		int j = 0;
+		while (previous == null || compareFloats(previous,pval)==0.0) {
+			previous = pval;
+			int sign = (j%2==0)?-1:1;
+			pval += 2.0 * sign * exp(-2.0 * lambda_squared * j * j);
+			j++;
+		}
+		
+		return D;
 	}
 
 	/*
@@ -61,7 +75,6 @@ public class Frequentist {
 	 * returns true if the alpha value of the chi square statistic is less than
 	 * the specified alpha.
 	 */
-
 	public static double chiSquareTest(int[] c, double[] p) {
 
 		Map<Integer, Integer> counts = new HashMap();

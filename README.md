@@ -54,7 +54,7 @@ The libnp library is written in scala and java and it is easiest to build it usi
 
 To build the libnp project in eclipse, start a new empty workspace and then install the scala-ide 2.0 release plugin for scala 2.9 by following these directions: http://scala-ide.org/download/sdk.html
 
-Next, place the following libraries in the subdirectory `lib' of the libnp repo trunk directory:
+Next, place the following libraries in the subdirectory `lib' of the parent directory of the libnp repo trunk directory:
 ````
 commons-cli-1.2.jar
 commons-math3-3.1.1.jar
