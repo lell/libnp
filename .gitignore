@@ -4,3 +4,5 @@
 *.swp
 scala
 lib/
+build/
+bin/

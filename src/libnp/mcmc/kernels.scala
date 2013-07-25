@@ -39,16 +39,16 @@ class slice(val lower: Double, val upper: Double) extends kernel[Double] {
 
 class mh[T](val q: T => sampleable[T]) extends kernel[T] {
   def apply(X: variable[T], gen: Generator): variable[T] = {
+    
     val Qf = q(X)
     val Y = X.mutate(Qf.sample(gen))
+    Qf.set(Y)
     val Qb = q(Y)
-    val a = (
-          Y.logDensity() - X.logDensity()
-          + Qb.logDensity() - Qf.logDensity()
-        ) 
-    
+    Qb.set(X)
+    val a = Y.logDensity() - X.logDensity() + Qb.logDensity() - Qf.logDensity()
+//    println("X " + X.get() + " PX " + X.logDensity() + " Y " + Y.get() + " PY " + Y.logDensity() + " QF " + Qf.logDensity() + " QB " + Qb.logDensity() + " A " + a)
     if (a > 0) {
-      Y 
+      Y
     } else if (a > gen.loguniform()) {
       Y
     } else {
