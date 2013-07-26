@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Math.floor;
+import static java.lang.Math.sqrt;
 import static libnp.statistics.Frequentist.ksTest;
 import static libnp.util.Operation.loadArray;
 
@@ -42,7 +43,7 @@ public class normal_check {
 		double D = ksTest(data, new UnivariateFunction() {
 			@Override
 			public double value(double x) {
-				return 0.5 * (erf(x) + 1.0);
+				return 0.5 * (erf(x/sqrt(2.0)) + 1.0);
 			}
 		});
 
