@@ -11,8 +11,8 @@ Here's a scala script to demonstrate some of the functionality of libnp. This co
 mh_test.scala:
 ````scala
 import libnp.random.variable
-import libnp.random.uniform
 import libnp.random.xfamily.normal
+import libnp.random.uniform
 import libnp.mcmc.mh
 import libnp.statistics.Generator
 
@@ -20,19 +20,19 @@ import libnp.statistics.Generator
 val initial_X = 0.0
 val mu = 0.0
 val sigma = 1.0
-val iters = 1000
+val iters = 100000
 val burnin = 100
 val w = 1.0
 
 // set up the rng and the kernel
 val gen = new Generator()
-val kernel = new mh[Double](
-    x => new uniform(x-w, x+w))
+val kernel = new mh[Double](x =>
+    new uniform(x-w, x+w))
 
 // initialize the chain
-var X = new normal(mu, sigma, initial_X)
+var X:variable[Double] = new normal(mu, sigma, initial_X)
 
-for (var iter <- 1 to iters) {
+for (iter <- 1 to iters) {
   // iterate the chain with mh kernel
   X = kernel.apply(X, gen)
   if (iter > burnin) {
@@ -43,7 +43,7 @@ for (var iter <- 1 to iters) {
 
 After running this program, we can use the normal_check program on its output. This should be run in the libnp repo trunk directory. If you want to run this in another directort, then change the -cp argument to point to the build subdirectory of the libnp repo trunk directory.
 ````
-$ scala mh_test.scala | java -cp build libnp.programs normal_check
+$ scala -cp bin mh_test.scala | java -cp bin libnp.programs normal_check
 ````
 
 
