@@ -43,7 +43,7 @@ for (iter <- 1 to iters) {
 
 After running this program, we can use the normal_check program on its output. This should be run in the libnp repo trunk directory. If you want to run this in another directort, then change the -cp argument to point to the build subdirectory of the libnp repo trunk directory.
 ````
-$ scala -cp bin mh_test.scala | java -cp bin libnp.programs normal_check
+$ scala -cp bin mh_test.scala | java -cp bin:../lib/commons-math3-3.1.1.jar libnp.programs.normal_chec
 ````
 
 
