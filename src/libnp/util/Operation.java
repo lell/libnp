@@ -16,6 +16,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.CRC32;
 
 public class Operation {
 
@@ -317,5 +318,12 @@ public class Operation {
 			offset += array.length;
 		}
 		return result;
+	}
+	
+	/* Creates an integer from the has of a string. Used to seed test cases for reproducible testing. */
+	public static int CRC(String string) {
+		CRC32 crc = new CRC32();
+		crc.update(string.getBytes());
+		return (int)(crc.getValue());
 	}
 }

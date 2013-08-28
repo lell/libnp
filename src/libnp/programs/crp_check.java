@@ -54,6 +54,9 @@ public class crp_check {
 		for (int i = 0; i < n; i++) {
 			if (sizes[i] > 0.0) {
 				probs.put(i + 1, log(sizes[i]));
+			} else {
+				assert counts.get(i+1) == 0;
+				counts.remove(i+1);
 			}
 		}
 		return chiSquareTest(counts, probs);

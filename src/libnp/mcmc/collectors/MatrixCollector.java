@@ -68,6 +68,7 @@ public class MatrixCollector implements Collector {
 	@Override
 	public void collect() {
 		Object[][] returned = (Object[][]) cc.get(property);
+		assert returned != null : property;
 		process(returned);
 	}
 
