@@ -326,4 +326,33 @@ public class Operation {
 		crc.update(string.getBytes());
 		return (int)(crc.getValue());
 	}
+	
+	public static String dump(String filename, String content) {
+		try {
+			BufferedWriter fp = new BufferedWriter(new FileWriter(filename));
+			fp.write(content);
+			fp.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return content;
+	}
+	
+	public static String undump(String filename) {
+		try {
+			BufferedReader fp = new BufferedReader(new FileReader(filename));
+			String content = "";
+			int c;
+			while ( (c = fp.read()) > 0) {
+				content += (char)c;
+			}
+			fp.close();
+			return content;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -9,9 +9,18 @@ import java.io.*;
 public class MatrixCollector implements Collector {
 	private Collectable cc;
 	private String property;
+	private Object arg = null;
 	private int index = 0;
 	boolean collapse = false; // only use one
 	String prefix;
+	
+
+	public MatrixCollector(Collectable cc, String property, String prefix, Object arg) {
+		this.cc = cc;
+		this.property = property;
+		this.prefix = prefix;
+		this.arg = arg;
+	}
 
 	public MatrixCollector(Collectable cc, String property, String prefix) {
 		this.cc = cc;
@@ -19,11 +28,12 @@ public class MatrixCollector implements Collector {
 		this.prefix = prefix;
 	}
 
-	public MatrixCollector(Collectable cc, String property, String prefix,
+	public MatrixCollector(Collectable cc, String property, String prefix, Object arg,
 			boolean collapse) {
 		
 		this(cc, property, prefix);
 		this.collapse = collapse;
+		this.arg = arg;
 
 		if (collapse) {
 			if (new File(prefix).exists() && !new File(prefix).delete()) {
@@ -67,7 +77,12 @@ public class MatrixCollector implements Collector {
 	}
 	@Override
 	public void collect() {
-		Object[][] returned = (Object[][]) cc.get(property);
+		Object[][] returned = null;
+		if (arg != null) {
+			returned = (Object[][]) cc.get(property, arg);
+		} else {
+			returned = (Object[][]) cc.get(property);
+		}
 		assert returned != null : property;
 		process(returned);
 	}
