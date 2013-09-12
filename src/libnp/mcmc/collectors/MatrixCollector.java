@@ -13,7 +13,12 @@ public class MatrixCollector implements Collector {
 	private int index = 0;
 	boolean collapse = false; // only use one
 	String prefix;
-	
+
+	public MatrixCollector(Collectable cc, String property, String prefix) {
+		this.cc = cc;
+		this.property = property;
+		this.prefix = prefix;
+	}
 
 	public MatrixCollector(Collectable cc, String property, String prefix, Object arg) {
 		this.cc = cc;
@@ -22,14 +27,7 @@ public class MatrixCollector implements Collector {
 		this.arg = arg;
 	}
 
-	public MatrixCollector(Collectable cc, String property, String prefix) {
-		this.cc = cc;
-		this.property = property;
-		this.prefix = prefix;
-	}
-
-	public MatrixCollector(Collectable cc, String property, String prefix, Object arg,
-			boolean collapse) {
+	public MatrixCollector(Collectable cc, String property, String prefix, Object arg, boolean collapse) {
 		
 		this(cc, property, prefix);
 		this.collapse = collapse;
