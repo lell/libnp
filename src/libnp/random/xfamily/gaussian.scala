@@ -16,7 +16,7 @@ import libnp.maths.Matrix
 
 class normal(val mean: variable[Double],
   val precision: variable[Double],
-  var x: Double = Double.NaN) extends variable[Double] with sampleable[Double] {
+  var x: Double = Double.NaN) extends variable[Double] with sampleable[Double] with Serializable {
   
   type Self = normal
 

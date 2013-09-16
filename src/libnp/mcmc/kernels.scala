@@ -8,12 +8,12 @@ import libnp.random.variable
 import libnp.random.sampleable
 import libnp.statistics.Generator
 
-trait kernel[T] {
+trait kernel[T] extends Serializable {
   def apply(X: variable[T], generator: Generator): variable[T]
 }
 
 // Slice sampler
-class slice(val lower: Double, val upper: Double) extends kernel[Double] {
+class slice(val lower: Double, val upper: Double) extends kernel[Double] with Serializable {
   def apply(X: variable[Double], generator: Generator): variable[Double] = {
     val slice = X.logDensity() - generator.nextExponential()
 
@@ -37,7 +37,7 @@ class slice(val lower: Double, val upper: Double) extends kernel[Double] {
   def getUpper(): Double = upper
 }
 
-class mh[T](val q: T => sampleable[T]) extends kernel[T] {
+class mh[T](val q: T => sampleable[T]) extends kernel[T] with Serializable {
   def apply(X: variable[T], gen: Generator): variable[T] = {
     
     val Qf = q(X)

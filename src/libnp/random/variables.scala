@@ -6,7 +6,7 @@ package libnp.random
 
 import libnp.statistics.Generator
 
-trait variable[T] {
+trait variable[T] extends Serializable {
   type Self <: variable[T]
   def logDensity(): Double
   def get(): T
@@ -14,11 +14,11 @@ trait variable[T] {
   def mutate(x: T): variable[T]
 }
 
-trait sampleable[T] extends variable[T] {
+trait sampleable[T] extends variable[T] with Serializable {
   def sample(gen: Generator): variable[T]
 }
 
-class dirac[T](var x: T) extends variable[T] {
+class dirac[T](var x: T) extends variable[T] with Serializable {
   type Self = dirac[T]
   def logDensity(): Double = Double PositiveInfinity
   def get(): T = x

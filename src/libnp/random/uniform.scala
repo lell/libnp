@@ -9,7 +9,7 @@ import libnp.statistics.Generator
 
 class uniform(val left: variable[Double],
   val right: variable[Double],
-  var x: Double = Double.NaN) extends variable[Double] with sampleable[Double] {
+  var x: Double = Double.NaN) extends variable[Double] with sampleable[Double] with Serializable {
   
   type Self = uniform
 
@@ -42,7 +42,7 @@ class uniform(val left: variable[Double],
 
 class loguniform(val left: variable[Double],
   val right: variable[Double],
-  var x: Double = Double.NaN) extends variable[Double] {
+  var x: Double = Double.NaN) extends variable[Double] with Serializable {
   
   type Self = loguniform
 
