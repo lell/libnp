@@ -19,13 +19,20 @@ class slice(val lower: Double, val upper: Double) extends kernel[Double] with Se
   
   def apply(X: variable[Double], generator: Generator): variable[Double] = {
     val s = X.logDensity() - generator.nextExponential()
-    iters = 0
+    /*if (s == Double.PositiveInfinity) {
+      return X
+    }*/
+    assert(s < Double.PositiveInfinity)
 
+    iters = 0
     //@tailrec
     def iter(X: variable[Double], l: Double, u: Double): variable[Double] = {
       iters += 1
-      val Y = X.mutate(generator.nextUniform(l, u))
-
+      if (iters > 3000) {
+        println("Error: slice sampling iteration threshold exceeded.")
+        exit(-1)
+      }
+      val Y = X.mutate(generator.nextUniform(l, u))      
       if (Y.logDensity() > s)
         return Y
 
