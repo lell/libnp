@@ -7,21 +7,26 @@ package libnp.mcmc
 import libnp.random.variable
 import libnp.random.sampleable
 import libnp.statistics.Generator
+import libnp.mcmc.collectors.Collectable
 
 trait kernel[T] extends Serializable {
   def apply(X: variable[T], generator: Generator): variable[T]
 }
 
 // Slice sampler
-class slice(val lower: Double, val upper: Double) extends kernel[Double] with Serializable {
+class slice(val lower: Double, val upper: Double) extends kernel[Double] with Serializable with Collectable {
+  var iters: Integer = 0
+  
   def apply(X: variable[Double], generator: Generator): variable[Double] = {
-    val slice = X.logDensity() - generator.nextExponential()
+    val s = X.logDensity() - generator.nextExponential()
+    iters = 0
 
     //@tailrec
     def iter(X: variable[Double], l: Double, u: Double): variable[Double] = {
+      iters += 1
       val Y = X.mutate(generator.nextUniform(l, u))
 
-      if (Y.logDensity() > slice)
+      if (Y.logDensity() > s)
         return Y
 
       else if (Y > X)
@@ -35,6 +40,16 @@ class slice(val lower: Double, val upper: Double) extends kernel[Double] with Se
 
   def getLower(): Double = lower
   def getUpper(): Double = upper
+  
+  @Override
+  def get(property_name: String): Object = {
+    iters
+  }
+
+  @Override
+  def get(property_name: String, arg: Object): Object = {
+    null
+  }
 }
 
 class mh[T](val q: T => sampleable[T]) extends kernel[T] with Serializable {

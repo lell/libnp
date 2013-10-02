@@ -28,6 +28,13 @@ public final class SpecialFunctions {
 		return tmp + log(ser * sqrt(2 * PI));
 	}
 
+	
+	public static double incompleteBeta(double a, double b, double x) {
+		IncompleteBeta beta = new IncompleteBeta();
+		beta.setParameters(a, b);
+		return beta.evaluate(x);
+	}
+
 	public static double[] crp_sizes(double alpha, int n) {
 
 		return crp_sizes(alpha, 0.0, n);
