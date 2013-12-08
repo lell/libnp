@@ -38,8 +38,8 @@ class beta(val a1: variable[Double],
     
   def set(X:Double): Unit = { x = X }
   
-  def mutate(x: Double) = {
-    new beta(a1, a2, x)
+  def mutate(X: Double) = {
+    new beta(a1, a2, X)
   }
   
   def sample(gen: Generator) = {
@@ -66,8 +66,8 @@ class exponential(val rate: variable[Double],
     
   def set(X:Double): Unit = { x = X }
   
-  def mutate(x: Double) = {
-    new exponential(rate, x)
+  def mutate(X: Double) = {
+    new exponential(rate, X)
   }
   
   def sample(gen: Generator) = {
@@ -85,7 +85,8 @@ class normal(val mean: variable[Double],
     0.5 * (log(2.0*PI)  - log(precision))
   
   def logDensity() = {
-    val diff = mean - x
+    val mean_d = mean.get()
+    val diff = mean_d - x
     -0.5 * diff * diff * precision - logNormalizer()
   }
 
@@ -94,8 +95,8 @@ class normal(val mean: variable[Double],
     
   def set(X:Double): Unit = { x = X }
     
-  def mutate(x: Double) =
-    new normal(mean, precision, x)
+  def mutate(X: Double) =
+    new normal(mean, precision, X)
   
   def sample(gen: Generator) = {
     mutate(gen.nextGaussian()/sqrt(precision) + mean)
@@ -122,6 +123,6 @@ class lognormal(val logmean: variable[Double],
     
   def set(X:Double): Unit = { x = X }
 
-  def mutate(x: Double) =
-    new lognormal(logmean, logprecision, x)
+  def mutate(X: Double) =
+    new lognormal(logmean, logprecision, X)
 }
