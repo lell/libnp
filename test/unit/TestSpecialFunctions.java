@@ -19,6 +19,12 @@ public class TestSpecialFunctions {
 					) == 0);
 		}
 		
+
+		assertEquals(
+				966.05087898981337,
+				incompleteBeta(1e-15, 1e-3, 1e-3),
+				1e-12);
+		
 		assertTrue(compareFloats(
 				incompleteBeta(0.5, 7.0, 1.0),
 				1.0,
