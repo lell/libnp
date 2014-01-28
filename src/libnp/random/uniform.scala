@@ -56,5 +56,4 @@ class loguniform(val left: variable[Double],
     
   def mutate(x: Double) =
     new loguniform(left, right, x)
-  
 }

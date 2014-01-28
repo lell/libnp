@@ -14,6 +14,10 @@ trait variable[T] extends Serializable {
   def mutate(x: T): variable[T]
 }
 
+trait resetable[T] extends variable[T] {
+  def reset(): variable[T]
+}
+
 trait sampleable[T] extends variable[T] with Serializable {
   def sample(gen: Generator): variable[T]
 }
