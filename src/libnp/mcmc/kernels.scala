@@ -30,7 +30,7 @@ class slice(val lower: Double, val upper: Double) extends kernel[Double] with Se
       iters += 1
       if (iters > 3000) {
         println("Error: slice sampling iteration threshold exceeded.")
-        exit(-1)
+        System.exit(-1)
       }
       val Y = X.mutate(generator.nextUniform(l, u))      
       if (Y.logDensity() > s)
