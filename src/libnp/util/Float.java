@@ -36,4 +36,12 @@ public class Float {
 			return -1;
 		}
 	}
+
+	public static boolean equal(double a, double b, double precision) {
+		return compareFloats(a, b, precision) == 0;
+	}
+	
+	public static boolean equal(double a, double b) {
+		return compareFloats(a, b) == 0;
+	}
 }
