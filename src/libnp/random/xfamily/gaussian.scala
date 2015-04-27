@@ -45,6 +45,20 @@ class beta(val a1: variable[Double],
   def sample(gen: Generator) = {
     mutate(gen.nextBeta(a1, a2))
   }
+  
+  def mean() = {
+    val alpha1: Double = a1
+    val alpha2: Double = a2
+    alpha1/(alpha1+alpha2)
+  }
+  
+  def variance() = {
+    val alpha1: Double = a1
+    val alpha2: Double = a2
+    (alpha1*alpha2)/((alpha1+alpha2)*
+    		(alpha1+alpha2)*
+			(alpha1+alpha2+1)); 
+  }
 }
 
 
