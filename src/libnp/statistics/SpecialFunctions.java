@@ -141,11 +141,11 @@ public final class SpecialFunctions {
 		}
 	}
 
-	public static double sum(double[] xs) {
+	public static double sum(float[] xs) {
 		return sum(xs, xs.length);
 	}
 
-	public static double sum(double[] xs, int length) {
+	public static double sum(float[] xs, int length) {
 		assert length > 0;
 		double result = xs[0];
 		for (int i = 1; i < length; i++) {
@@ -165,11 +165,11 @@ public final class SpecialFunctions {
 		return result;
 	}
 
-	public static void normalize(double[] xs) {
+	public static void normalize(float[] xs) {
 		normalize(xs, xs.length);
 	}
 
-	public static void normalize(double[] xs, int length) {
+	public static void normalize(float[] xs, int length) {
 		double z = sum(xs, length);
 		assert !Double.isNaN(z);
 		for (int i = 0; i < length; i++) {

@@ -99,11 +99,11 @@ public class Generator extends Random {
 		return null;
 	}
 
-	public int discrete(double[] probs) {
+	public int discrete(float[] probs) {
 		return discrete(probs, probs.length);
 	}
 
-	public int discrete(double[] probs, int length) {
+	public int discrete(float[] probs, int length) {
 		assert length > 0;
 		if (length == 1) {
 			return 0;
