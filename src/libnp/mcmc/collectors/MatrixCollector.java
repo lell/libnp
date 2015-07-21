@@ -45,6 +45,8 @@ public class MatrixCollector implements Collector {
 	}
 
 	protected void process(Object[][] returned) {
+		if(returned==null)
+			return;
 		String filename = prefix;
 		if (!collapse) {
 			filename += String.format("/%06d", index++);

@@ -115,8 +115,8 @@ public class Generator extends Random {
 		}
 		
 		assert (compareFloats(sum(probs, length), 1.0, 1e-8) == 0) : sum(probs, length);
-		double u = uniform();
-		double cdf = probs[0];
+		float u = uniformFloat();
+		float cdf = probs[0];
 		if (cdf > u) {
 			return 0;
 		}
@@ -128,8 +128,15 @@ public class Generator extends Random {
 			}
 		}
 
-		assert false;
+		assert false; 
 		return -1;
+	}
+
+	/**
+	 * @return
+	 */
+	private float uniformFloat() {
+		return nextFloat();
 	}
 
 	/*
