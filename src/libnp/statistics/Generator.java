@@ -123,7 +123,7 @@ public class Generator extends Random {
 
 		for (int i = 1; i < length; i++) {
 			cdf += probs[i];
-			if (cdf > u) {
+			if (cdf >= u) {
 				return i;
 			}
 		}
